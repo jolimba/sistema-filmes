@@ -20,12 +20,8 @@
       "typeorm": "0.3.7"
    },
    "scripts": {
-      "start": "node .",
+      "start": "nodemon ./build/index.js",
       "build": "tsc",
       "dev": "nodemon"
-   },
-   "nodemonConfig": {
-      "ext": "ts",
-      "exec": "npm run build && npm start"
-    }
+   }
 }

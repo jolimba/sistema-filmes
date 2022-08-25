@@ -11,5 +11,8 @@ app.put('/users/:id', user.updateUser)
 app.get('/users', user.listUsers)
 app.get('/users/:id', user.getOneUser)
 app.delete('/users/:id', user.removeUser)
+app.get('/ping', (req, res) => {
+    res.status(200).send('ping')
+})
 
 app.listen(port, () => `server running on port ${port}`)
