@@ -3,10 +3,13 @@ const app: Application = express()
 const port = process.env.PORT || 3333
 var bodyParser = require('body-parser')
 var user = require('./config/user.route')
+var userMiddleware = require('./src/middleware/UserMiddleware')
 
 app.use(bodyParser.json())
+app.use('/login', userMiddleware.verifyBodyLogin)
 
 app.post('/users', user.addNewUser)
+app.post('/login', user.loginUser)
 app.put('/users/:id', user.updateUser)
 app.get('/users', user.listUsers)
 app.get('/users/:id', user.getOneUser)

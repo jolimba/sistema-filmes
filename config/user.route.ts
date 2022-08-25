@@ -20,3 +20,7 @@ exports.updateUser = async function(req, res) {
 exports.removeUser = async function(req, res) {
   user.removeUser(req.params.id).then(result => res.json({'message': result}))
 }
+
+exports.loginUser = async function(req, res) {
+  user.login(req.body).then(result => res.json({'message': result}))
+}
