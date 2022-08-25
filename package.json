@@ -20,7 +20,7 @@
       "typeorm": "0.3.7"
    },
    "scripts": {
-      "start": "nodemon index.js",
+      "start": "nodemon index.ts",
       "build": "tsc",
       "dev": "nodemon"
    }
