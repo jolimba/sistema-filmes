@@ -1,3 +1,4 @@
+--set transaction read write;
 CREATE TABLE users (
     id_user serial PRIMARY KEY,
     first_name VARCHAR(30) NOT NULL,

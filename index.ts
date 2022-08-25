@@ -1,6 +1,6 @@
 import express, {Application, Request, Response} from 'express'
 const app: Application = express()
-const port = 3333
+const port = process.env.PORT || 3333
 var bodyParser = require('body-parser')
 var user = require('./config/user.route')
 
