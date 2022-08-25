@@ -12,5 +12,10 @@
       "experimentalDecorators": true,
       "sourceMap": true,
       "esModuleInterop": true,
-   }
+      "forceConsistentCasingInFileNames": true,
+      "removeComments": true,
+   },
+   "include": [
+      "./index.ts"
+   ]
 }
