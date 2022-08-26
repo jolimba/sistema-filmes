@@ -7,7 +7,7 @@ info:
     email: do_later@gmail.com
   version: 0.0.1
 servers:
-  - url: maybe
+  - url: https://recomenda-filmes.herokuapp.com/users
 tags:
   - name: users
     description: Operations about user
@@ -48,6 +48,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/User'
+        '404':
+          description: Users not found
       security:
         - user_auth:
             - read:users
@@ -151,13 +153,21 @@ paths:
         - login
       summary: Remove for a specific user
       description: Remove for a specific user using user_id
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Login'
+        required: true
       responses:
         '200':
           description: Successful operation
+        '401':
+          description: Unauthourized operation
           content:
             application/json:
-              schema:
-                $ref: '#/components/schemas/Login'
+                schema:
+                  $ref: '#/components/schemas/Error401'
       security:
         - user_auth:
             - read:users
@@ -197,6 +207,12 @@ components:
         password:
           type: string
           example: '12345'
+    Error401:
+      type: object
+      properties:
+        message:
+          type: string
+          example: 'Missing data'
   requestBodies:
     UserArray:
       description: List of user object

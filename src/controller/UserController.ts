@@ -88,9 +88,10 @@ export const login = async (body: any) => {
     let err
     let repository = new UserRepository()
     await repository.loginUser(pwUser, loginUser, emailUser)
-    .catch(error => {
+    .then(async () => {
+        await AppDataSource.destroy()
+    }).catch(error => {
         err = error.message
     })
-    AppDataSource.destroy()
     return err ? err : 'usuário logado'
 }
