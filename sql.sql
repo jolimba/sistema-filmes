@@ -9,7 +9,7 @@ CREATE TABLE users (
     pw_user VARCHAR(50) NOT NULL
 );
 
-CREATE TABLE programs (
+CREATE TABLE movies (
     id_program serial PRIMARY KEY,
     name_program VARCHAR(150) NOT NULL,
     category VARCHAR(5) NOT NULL,
@@ -22,7 +22,7 @@ CREATE TABLE lists (
     id_program_fk INTEGER NOT NULL,
     type_list CHAR(1) NOT NULL,
     FOREIGN KEY (id_user_fk) REFERENCES users (id_user),
-    FOREIGN KEY (id_program_fk) REFERENCES programs (id_program)
+    FOREIGN KEY (id_program_fk) REFERENCES movies (id_program)
 );
 
 -- alters user
@@ -32,11 +32,7 @@ ALTER TABLE users
 ALTER TABLE users 
     ADD CONSTRAINT user_unique UNIQUE (login_user);
 
--- alters program
-ALTER TABLE programs
-    ADD CONSTRAINT check_program_type CHECK (category IN ('movie', 'serie'));
-
---alter list
+-- alters list
 -- S = 'seen' e N = 'not seen'
-ALTER TABLE lists 
-    ADD CONSTRAINT check_list_type CHECK (type_list IN ('S', 'N'));
+-- ALTER TABLE lists 
+--     ADD CONSTRAINT check_list_type CHECK (type_list IN ('S', 'N'));
