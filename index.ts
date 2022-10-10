@@ -1,4 +1,5 @@
 import express, {Application, Request, Response} from 'express'
+require('dotenv').config()
 const app: Application = express()
 const cors = require('cors')
 const port = process.env.PORT || 3333
@@ -11,7 +12,7 @@ app.use(cors())
 app.use(bodyParser.json())
 
 app.post('/users', userMiddleware.verifyBodyUser, user.addNewUser)
-app.post('/login', userMiddleware.verifyBodyLogin, user.loginUser)
+app.post('/login', userMiddleware.authenticateUser, userMiddleware.verifyBodyLogin, user.loginUser)
 app.post('/content_based', recommendation.contentBased)
 app.put('/users/:id', userMiddleware.verifyBodyUser, user.updateUser)
 app.get('/users', user.listUsers)
@@ -19,6 +20,7 @@ app.get('/users/:id', user.getOneUser)
 app.get('/cold_start', recommendation.coldStart)
 app.delete('/users/:id', user.removeUser)
 app.get('/ping', (req, res) => {
+    console.log(process.env.ACCESS_TOKEN_SECRET)
     res.status(200).send('ping')
 })
 
