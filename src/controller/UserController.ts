@@ -1,4 +1,6 @@
 'use strict'
+const jwt = require('jsonwebtoken');
+require('dotenv').config()
 import { UserRepository } from "../repository/UserRepository"
 import { AppDataSource } from "../data-source"
 
@@ -44,7 +46,7 @@ export const addNewUser = async (body: any) => {
     }).catch(error => {
         err = error.message
     })
-    return err ? err : 'usuário criado'
+    return err ? err : `User ${body.login_user} created.`
 }
 
 export const updateUser = async (id: number, body: any) => {
@@ -64,7 +66,7 @@ export const updateUser = async (id: number, body: any) => {
     }).catch(error => {
         err = error.message
     })
-    return err ? err : 'usuário atualizado'
+    return err ? err : `User ${body.login_user} updated.`
 }
 
 export const removeUser = async (id: number) => {
@@ -76,7 +78,7 @@ export const removeUser = async (id: number) => {
     }).catch(error => {
         err = error.message
     })
-    return err ? err : 'usuário removido'
+    return err ? err : 'User removed.'
 }
 
 export const login = async (body: any) => {
@@ -87,11 +89,17 @@ export const login = async (body: any) => {
     console.log(pwUser, loginUser, emailUser)
     let err
     let repository = new UserRepository()
+    let token = createToken(emailUser, pwUser)
     await repository.loginUser(pwUser, loginUser, emailUser)
     .then(async () => {
         await AppDataSource.destroy()
     }).catch(error => {
         err = error.message
     })
-    return err ? err : 'usuário logado'
+    return err ? err : token
+}
+
+const createToken = (email: string, pw: string): string => {
+    const user = { email: email, pw: pw }
+    return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET)
 }
