@@ -40,5 +40,4 @@ export const authenticateUser = (req, res, next) => {
     } else {
         res.status(401).json({message:'Missing token'})
     }
-    
 }

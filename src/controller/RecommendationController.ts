@@ -27,7 +27,6 @@ export const getContentBased = async (movie: string) => {
     })
     .then(res => getContent = res.json())
     c = await getContent
-    // console.log(toArrayContentBased(c))
     let data = ordenaDados(toArrayContentBased(c))
     return data
 }
@@ -43,7 +42,6 @@ const ordenaDados = async (movie: any) => {
           await getExternalImage(movie[0][i])
         ]);
     }
-    // console.log(dados_ordenados);
     return dados_ordenados
 }
 
