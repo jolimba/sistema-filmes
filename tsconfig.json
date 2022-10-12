@@ -16,6 +16,8 @@
       "removeComments": true,
    },
    "include": [
-      "./index.ts"
+      "./index.ts",
+      "./config/user.route.ts",
+      "./src"
    ]
 }

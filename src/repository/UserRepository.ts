@@ -70,4 +70,18 @@ export class UserRepository {
         .where("id = :id", {id: idUser})
         .execute()
     }
+
+    loginUser = async (pwUser: string, loginUser = null, emailUser = null) => {
+        await AppDataSource.initialize()
+        if(loginUser != null) {
+            return AppDataSource.manager
+            .createQueryBuilder(Users, "user")
+            .where("user.loginUser = :login and user.pwUser = :pw", { login: loginUser, pw: pwUser})
+            .getOne()
+        }
+        return AppDataSource.manager
+            .createQueryBuilder(Users, "user")
+            .where("user.emailUser = :email and user.pwUser = :pw", { email: emailUser, pw: pwUser})
+            .getOne()
+    }
 }

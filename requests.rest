@@ -1,0 +1,9 @@
+POST http://localhost:3333/login
+Content-Type: application/json
+
+{
+    "email_user":"senhorewrw@email.com",
+    "pw_user": "ee456"
+}
+
+jwt.sign(user, process.env.ACCESS_TOKEN_SECRET)
