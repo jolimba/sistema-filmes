@@ -9,11 +9,42 @@ info:
 servers:
   - url: https://recomenda-filmes.herokuapp.com/
 tags:
+
+  - name: recommendations
+    description: Operations about recomendations
   - name: users
     description: Operations about user
   - name: login
     description: Access to system
+    
 paths:
+    
+  /cold_start:
+    get:
+        tags:
+          - recommendations
+        summary: Make HTTP request and order the movies
+        description: Group the films on the cards
+        responses:
+          '200':
+            description: Successful operation
+            
+  /contentBased:
+    post: 
+      tags: 
+        - recommendations 
+      summary: Access the movies in the database
+      description: Search movies in the back
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/contentBased'
+        required: true
+      responses:
+        '201':
+          description: Successful operation
+
   /users:
     post:
       tags:
@@ -202,8 +233,34 @@ paths:
       security:
         - user_auth:
             - read:users
+            
+            
+            
+            
 components:
   schemas:
+    getColdStart:
+      type: object
+      properties:
+        movies:
+          type: object
+          example: rec
+
+    contentBased:
+      type: object
+      properties:
+        movies:
+          type: object
+          example: rec
+      
+      
+      
+      
+      
+      
+      
+      
+      
     User:
       type: object
       properties:
