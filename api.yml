@@ -9,16 +9,97 @@ info:
 servers:
   - url: https://recomenda-filmes.herokuapp.com/
 tags:
-
+  - name: lists
+    description: Create a list 
   - name: recommendations
     description: Operations about recomendations
   - name: users
     description: Operations about user
   - name: login
     description: Access to system
-    
+
 paths:
-    
+  /lists/{user_id}:
+    get:
+        tags:
+          - lists
+        summary: Search for user's movie list
+        description: Consultation List From a User
+        parameters:
+          - in: path
+            name: user_id
+            required: true
+            schema:
+              type: integer
+              minimum: 1
+            description: The user ID
+        responses:
+          '200':
+            description: Successful operation
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Lists'
+    delete:
+        tags:
+          - lists
+        summary: Remove a movie from the user's list
+        description: Remove for a specific user using user_id
+        parameters:
+          - in: path
+            name: user_id
+            required: true
+            schema:
+              type: integer
+              minimum: 1
+            description: The user ID
+        responses:
+          '200':
+            description: Successful operation
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/UserRemove'
+          '404':
+            description: User not found
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Error404'
+        security:
+          - user_auth:
+              - remove:users                    
+  /list: 
+    delete:
+      tags:
+        - lists
+      summary: Remove user's list
+      description: Removes all movies from the list and clears the list
+      responses: 
+        '200':
+          description: Sucessful operation
+          content:
+            applicarion/json:
+              schema:
+                $ref: '#/components/schemas/RemoveLists'
+    post: 
+      tags: 
+        - lists 
+      summary:  Add a new movie to the user list 
+      description: lists
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Lists'
+        required: true
+      responses:
+        '201':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListsResponse'
   /cold_start:
     get:
         tags:
@@ -28,8 +109,11 @@ paths:
         responses:
           '200':
             description: Successful operation
-            
-  /contentBased:
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/ColdStart'
+  /content_based:
     post: 
       tags: 
         - recommendations 
@@ -39,12 +123,15 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/contentBased'
+              $ref: '#/components/schemas/ContentBased'
         required: true
       responses:
         '201':
           description: Successful operation
-
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ColdStart'
   /users:
     post:
       tags:
@@ -233,34 +320,41 @@ paths:
       security:
         - user_auth:
             - read:users
-            
-            
-            
-            
 components:
   schemas:
-    getColdStart:
+    RemoveLists:
       type: object
       properties:
-        movies:
-          type: object
-          example: rec
-
-    contentBased:
+        message:
+          type: string
+          example: 'List cleared'
+    ListsResponse:
       type: object
       properties:
-        movies:
-          type: object
+        message: 
+          type: string
+          example: 'Movie added to yout list'
+    Lists:
+      type: object
+      properties:
+        id_user:
+          type: integer
+          example: 2
+        id_movie:
+          type: integer
+          example: 22
+    ColdStart:
+      type: object
+      properties:
+        movie:
+          type: string
           example: rec
-      
-      
-      
-      
-      
-      
-      
-      
-      
+    ContentBased:
+      type: object
+      properties:
+        movies_name:  
+          type: string
+          example: 'nome de um filme'
     User:
       type: object
       properties:
