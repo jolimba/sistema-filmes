@@ -112,7 +112,7 @@ paths:
             content:
               application/json:
                 schema:
-                  $ref: '#/components/schemas/ColdStart'
+                  $ref: '#/components/schemas/ColdStartResponse'
   /content_based:
     post: 
       tags: 
@@ -131,7 +131,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ColdStart'
+                $ref: '#/components/schemas/ColdStartResponse'
   /users:
     post:
       tags:
@@ -343,12 +343,42 @@ components:
         id_movie:
           type: integer
           example: 22
-    ColdStart:
+    ColdStartResponse:
       type: object
       properties:
-        movie:
-          type: string
-          example: rec
+          movies_info:
+            type: object
+            properties: 
+              movie_info:
+                type: object
+                properties: 
+                  id_program:
+                    type: integer
+                    example: 257
+                  serie_title:
+                    type: string
+                    example: Underground
+                  genre:
+                    type: string
+                    example: Comedy, Drama, War
+                  imdb_rating: 
+                    type: number
+                    example: 8.1
+                  overview: 
+                    type: string
+                    example: This is an overview
+                  director: 
+                    type: string
+                    example: Emir Kusturica
+                  star1: 
+                    type: string
+                    example: Predrag 'Miki' Manojlovic
+                  star2: 
+                    type: string
+                    example: Lazar Ristovski
+              movie_img: 
+                type: string
+                example: http://image.tmdb.org/t/p/w500/lnWkyG3LLgbbrIEeyl5mK5VRFe4.
     ContentBased:
       type: object
       properties:
