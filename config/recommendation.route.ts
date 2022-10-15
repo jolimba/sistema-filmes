@@ -16,7 +16,7 @@ exports.contentBased = async function(req, res) {
     .then(
         rec => res.status(201)
         .json({
-            'movies': rec
+            'movies_info': rec
         })
     )
 }

@@ -346,7 +346,7 @@ components:
     ColdStart:
       type: object
       properties:
-        movie:
+        movie_info:
           type: string
           example: rec
     ContentBased:
