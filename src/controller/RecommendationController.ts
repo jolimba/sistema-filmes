@@ -1,14 +1,20 @@
 'use strict'
 import fetch from 'node-fetch';
+import { AppDataSource } from "../data-source"
+import { MoviesRepository } from '../repository/MoviesRepository';
 const key = 'f43708e982fdc8109b5b492ef979cfa5'
 
 export const getColdStart = async () => {
     let coldStart, c
-    await fetch('http://localhost:8000/cold_start')
+    await fetch('http://localhost:8000/cold_start', {
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
     .then(res => coldStart = res.json())
     c = await coldStart
-    let movie = toArray(JSON.parse(c))
-    return ordenaDados(movie)
+    console.log(JSON.parse(c))
+    return getMovieInfo(JSON.parse(c))
 }
 
 export const getContentBased = async (movie: string) => {
@@ -27,37 +33,9 @@ export const getContentBased = async (movie: string) => {
     })
     .then(res => getContent = res.json())
     c = await getContent
-    let data = ordenaDados(toArrayContentBased(c))
-    return data
-}
-
-const ordenaDados = async (movie: any) => {
-    console.log(movie)
-    let dados_ordenados = []
-    let tamanho = movie[0].length
-    for (let i = 0; i < tamanho; i++) {
-        dados_ordenados.push([
-          movie[0][i],
-          movie[1][i],
-          await getExternalImage(movie[0][i])
-        ]);
-    }
-    return dados_ordenados
-}
-
-const toArrayContentBased = (data: any) => {
-    let arr = data.map(function(obj) {
-        return Object.keys(obj).map(function(key) {
-            return obj[key];
-        });
-    });
-    return arr
-}
-
-const toArray = (data: any) => {
-    let title = Object.keys(data.Series_Title).map((key) => data.Series_Title[key])
-    let rating = Object.keys(data.IMDB_Rating).map((key) => data.IMDB_Rating[key])
-    return [title, rating]
+    // return getMovieInfo(JSON.parse(c))
+    console.log({Series_Title: c})
+    return getMovieInfo({Series_Title: c})
 }
 
 const getExternalImage = async (movie) => {   
@@ -81,3 +59,14 @@ const getExternalImage = async (movie) => {
     return url_img
 }
 
+const getMovieInfo = async (movie_names: any) => {
+    let movies_info = []
+    let movie = new MoviesRepository()
+    for (const [key, value] of Object.entries(movie_names.Series_Title)) {
+        movies_info.push({
+            movie_info: await movie.getOne(value),
+            movie_img: await getExternalImage(value)
+        })
+    }
+    return movies_info
+}

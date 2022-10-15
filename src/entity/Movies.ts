@@ -1,56 +1,29 @@
 import { Entity, PrimaryGeneratedColumn, Column } from "typeorm"
 
-@Entity()
+@Entity('movies')
 export class Movies {
 
     @PrimaryGeneratedColumn()
-    id: number
+    id_program: number
 
     @Column()
-    Poster_Link: string
+    series_title: string
 
     @Column()
-    Series_Title: string
+    genre: string
 
     @Column()
-    Released_Year: string
+    imdb_rating: string
 
     @Column()
-    Certificate: string
+    overview: string
 
     @Column()
-    Runtime: string
+    director: string
 
     @Column()
-    Genre: string
+    star1: string
 
     @Column()
-    IMDB_Rating: string
-
-    @Column()
-    Overview: string
-
-    @Column()
-    Meta_score: string
-
-    @Column()
-    Director: string
-
-    @Column()
-    Star1: string
-
-    @Column()
-    Star2: string
-
-    @Column()
-    Star3: string
-
-    @Column()
-    Star4: string
-
-    @Column()
-    No_of_Votes: string
-
-    @Column()
-    Gross: string
+    star2: string
 }
