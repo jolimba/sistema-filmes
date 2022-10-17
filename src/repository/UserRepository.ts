@@ -4,17 +4,21 @@ import { Users } from "../entity/Users"
 
 export class UserRepository {
     
-    getAll = async () => {
+    getAll = async () : Promise<Users[]> => {
         await AppDataSource.initialize()
-        return AppDataSource.manager.find(Users)
+        let users = await AppDataSource.manager.find(Users)
+        await AppDataSource.destroy()
+        return users
     }
 
-    getOne = async (idUser: number) => {
+    getOne = async (id_user: number) : Promise<Users> => {
         await AppDataSource.initialize()
-        return  AppDataSource.manager
+        let user = await AppDataSource.manager
             .createQueryBuilder(Users, "user")
-            .where("user.id = :id", { id: idUser })
+            .where("user.id = :id", { id: id_user })
             .getOne()
+        await AppDataSource.destroy()
+        return user
     }
 
     addNewUser = async (
@@ -24,7 +28,7 @@ export class UserRepository {
         email_user: string,
         login_user: string,
         pw_user: string
-    ) => {
+    ) : Promise<boolean> => {
         await AppDataSource.initialize()
         const user = new Users()
         user.firstName = first_name
@@ -34,10 +38,12 @@ export class UserRepository {
         user.loginUser = login_user
         user.pwUser = pw_user
         await AppDataSource.manager.save(user)
+        await AppDataSource.destroy()
+        return true
     }
 
     updateUser = async (
-        idUser: number,
+        id_user: number,
         first_name: string,
         last_name: string,
         birth_date: string,
@@ -49,7 +55,7 @@ export class UserRepository {
         await AppDataSource.manager
             .createQueryBuilder(Users, "user")
             .update()
-            .where("id = :id", { id: idUser })
+            .where("id = :id", { id: id_user })
             .set({
                 firstName: first_name,
                 lastName: last_name,
@@ -59,16 +65,19 @@ export class UserRepository {
                 pwUser: pw_user
             })
             .execute()
+        await AppDataSource.destroy()
+        return true
     }
 
-    removeUser = async (idUser: number) => {
+    removeUser = async (id_user: number) => {
         await AppDataSource.initialize()
         await AppDataSource.manager
         .createQueryBuilder(Users, "user")
         .delete()
         .from(Users)
-        .where("id = :id", {id: idUser})
+        .where("id = :id", {id: id_user})
         .execute()
+        await AppDataSource.destroy()
     }
 
     loginUser = async (pwUser: string, loginUser = null, emailUser = null) => {
@@ -79,9 +88,11 @@ export class UserRepository {
             .where("user.loginUser = :login and user.pwUser = :pw", { login: loginUser, pw: pwUser})
             .getOne()
         }
-        return AppDataSource.manager
+        let user = await AppDataSource.manager
             .createQueryBuilder(Users, "user")
             .where("user.emailUser = :email and user.pwUser = :pw", { email: emailUser, pw: pwUser})
             .getOne()
+        await AppDataSource.destroy()
+        return user
     }
 }

@@ -1,8 +1,8 @@
 'use strict'
 import fetch from 'node-fetch';
-import { AppDataSource } from "../data-source"
 import { MoviesRepository } from '../repository/MoviesRepository';
-const key = 'f43708e982fdc8109b5b492ef979cfa5'
+require('dotenv').config()
+const key = process.env.ACCESS_TOKEN_SECRET_TMDB
 
 export const getColdStart = async () => {
     let coldStart, c
@@ -33,8 +33,6 @@ export const getContentBased = async (movie: string) => {
     })
     .then(res => getContent = res.json())
     c = await getContent
-    // return getMovieInfo(JSON.parse(c))
-    console.log({Series_Title: c})
     return getMovieInfo({Series_Title: c})
 }
 

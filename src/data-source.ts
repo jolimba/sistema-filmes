@@ -18,7 +18,7 @@ export const AppDataSource = new DataSource({
     database: "tcc",
     synchronize: false,
     logging: false,
-    entities: [Users, Movies],
+    entities: [Users, Movies, Lists],
     migrations: [],
     subscribers: [],
     // ssl: {

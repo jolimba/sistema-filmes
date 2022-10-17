@@ -1,14 +1,17 @@
-import {Entity, Column, OneToOne, JoinColumn} from "typeorm"; 
+import {Entity, PrimaryGeneratedColumn, ManyToOne, OneToOne, JoinColumn} from "typeorm"; 
 import {Movies} from "./Movies";
 import {Users} from "./Users";
 
-@Entity()
+@Entity('lists')
 export class Lists {
 
-    @OneToOne(type => Movies) @JoinColumn()
-    id_movies: Movies
+    @PrimaryGeneratedColumn()
+    id_list: number
 
     @OneToOne(type => Users) @JoinColumn()
-    id_users: Users
-    
+    users: Users
+
+    @OneToOne(type => Movies) @JoinColumn()
+    movies: Movies
+
 }
