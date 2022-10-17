@@ -22,5 +22,5 @@ exports.removeUser = async function(req, res) {
 }
 
 exports.loginUser = async function(req, res) {
-  user.login(req.body).then(result => res.status(200).json({'token': result}))
+  user.login(req.body).then(result => res.status(200).json(result))
 }

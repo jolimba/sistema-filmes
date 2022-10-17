@@ -55,9 +55,9 @@ export const login = async (body: any) => {
     loginUser = body.login_user
     emailUser = body.email_user
     let repository = new UserRepository()
-    await repository.loginUser(pwUser, loginUser, emailUser)
+    let user = await repository.loginUser(pwUser, loginUser, emailUser)
     let token = createToken(emailUser, pwUser)
-    return token
+    return {'token': token, 'user_id': user.id}
 }
 
 const createToken = (email: string, pw: string) : string => {
