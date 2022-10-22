@@ -2,7 +2,7 @@
 const jwt = require('jsonwebtoken');
 require('dotenv').config()
 import { UserRepository } from "../repository/UserRepository"
-import { AppDataSource } from "../data-source"
+import { Users } from "../entity/Users"
 
 export const getUsers = async () => {
     let repository = new UserRepository()
@@ -10,13 +10,13 @@ export const getUsers = async () => {
     return users
 }
 
-export const getOneUser = async (id: number) => {
+export const getOneUser = async (id: number) : Promise<Users> => {
     let repository = new UserRepository()
     let user = await repository.getOne(id)
     return user
 }
 
-export const addNewUser = async (body: any) => {
+export const addNewUser = async (body: any) : Promise<string> => {
     let repository = new UserRepository()
     await repository.addNewUser(
         body.first_name,
@@ -29,7 +29,7 @@ export const addNewUser = async (body: any) => {
     return `User ${body.login_user} created.`
 }
 
-export const updateUser = async (id: number, body: any) => {
+export const updateUser = async (id: number, body: any) : Promise<string> => {
     let repository = new UserRepository()
     await repository.updateUser(
         id,
@@ -43,26 +43,26 @@ export const updateUser = async (id: number, body: any) => {
     return `User ${body.login_user} updated.`
 }
 
-export const removeUser = async (id: number) => {
+export const removeUser = async (id: number) : Promise<string> => {
     let repository = new UserRepository()
     await repository.removeUser(id)
     return'User removed.'
 }
 
-export const login = async (body: any) => {
-    let pwUser, loginUser, emailUser
-    pwUser = body.pw_user
-    loginUser = body.login_user
-    emailUser = body.email_user
+export const login = async (body: any) : Promise<object> => {
+    let pw_user : string, login_user : string, email_user : string
+    pw_user = body.pw_user
+    login_user = body.login_user
+    email_user = body.email_user
     let repository = new UserRepository()
-    let user = await repository.loginUser(pwUser, loginUser, emailUser)
-    let token = createToken(emailUser, pwUser)
-    return {'token': token, 'user_id': user.id}
+    let user = await repository.loginUser(pw_user, login_user, email_user)
+    let token = createToken(user.id, pw_user)
+    return {token}
 }
 
-const createToken = (email: string, pw: string) : string => {
-    const user = { email: email, pw: pw }
+const createToken = (id_user: number, pw: string) : string => {
+    const user = { "id": id_user.toString(), "pw": pw }
     return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {
-        expiresIn: Math.floor(Date.now() / 1000) + (60 * 60)
+        expiresIn: '1h'
     })
 }

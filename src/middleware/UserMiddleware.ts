@@ -24,21 +24,3 @@ export const verifyBodyUser = async (req, res, next) => {
         next()
     }
 }
-
-export const authenticateUser = (req, res, next) => {
-    const authHeader = req.headers['authorization']
-    const token = authHeader && authHeader.split(' ')[1]
-    console.log(authHeader)
-    if(token) {
-        jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err) => {
-            if (err){
-                res.status(403).json({message:'Invalid token'})
-            }
-            else {
-                next()
-            }
-        })   
-    } else {
-        res.status(401).json({message:'Missing token'})
-    }
-}

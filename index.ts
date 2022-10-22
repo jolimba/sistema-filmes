@@ -13,23 +13,23 @@ let list = require('./config/list.route')
 app.use(cors())
 app.use(bodyParser.json())
 
-// usuário
+// usuário - acesso interno
 app.post('/users', userMiddleware.verifyBodyUser, user.addNewUser)
 app.post('/login', userMiddleware.verifyBodyLogin, user.loginUser)
 app.put('/users/:id', userMiddleware.verifyBodyUser, user.updateUser)
 app.get('/users', user.listUsers)
 app.get('/users/:id', user.getOneUser)
 app.delete('/users/:id', user.removeUser)
-// recomendação
+// recomendação - qualquer usuário
 app.post('/content_based', recommendation.contentBased)
 app.get('/cold_start', recommendation.coldStart)
-// lista
+// lista - usuários logados
 app.post('/list', list.saveList)
-app.get('/list/:id_user', list.getList)
-app.delete('/list/:id_user', list.removeList)
-app.delete('/list/:id_user/:id_movie', list.removeMovie)
+app.get('/list', listMiddleware.authenticateToken, list.getList)
+app.delete('/list', list.removeList)
+app.delete('/list/:id_movie', list.removeMovie)
 // ping (rota teste)
-app.get('/ping', (req, res) => {
+app.get('/ping', (res : Response) => {
     res.status(200).send('pong')
 })
 

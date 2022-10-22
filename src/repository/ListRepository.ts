@@ -18,7 +18,7 @@ export class ListRepository {
         return user_list
     }
 
-    addToList = async (user: Users, movie: Movies) => {
+    addToList = async (user: Users, movie: Movies) : Promise<string> => {
         await AppDataSource.initialize()
         let list = new Lists()
         list.users = user

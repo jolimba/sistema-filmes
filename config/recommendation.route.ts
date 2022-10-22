@@ -1,7 +1,8 @@
 'use strict'
+import {Request, Response} from 'express'
 import { getColdStart, getContentBased } from '../src/controller/RecommendationController'
 
-exports.coldStart = async function(req, res) {
+exports.coldStart = async function(req : Request, res : Response) {
     getColdStart()
     .then(
         rec => res.status(200)
@@ -11,7 +12,7 @@ exports.coldStart = async function(req, res) {
     )
 }
 
-exports.contentBased = async function(req, res) {
+exports.contentBased = async function(req : Request, res : Response) {
     getContentBased(req.body.movie_name)
     .then(
         rec => res.status(201)

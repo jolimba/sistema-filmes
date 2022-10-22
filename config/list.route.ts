@@ -1,8 +1,12 @@
 'use strict'
+import {Request, Response} from 'express'
+const jwt = require('jsonwebtoken');
+require('dotenv').config()
+
 import { saveList, getList, removeList, removeOneMovie } from '../src/controller/ListController'
 import { AppDataSource } from "../src/data-source"
 
-exports.saveList = async (req, res) => {
+exports.saveList = async (req : Request, res : Response) => {
     saveList(req.body.id_user, req.body.id_movie)
     .then(rec => {
         res.status(201).json({'message': rec})
@@ -13,8 +17,11 @@ exports.saveList = async (req, res) => {
     })
 }
 
-exports.getList = async (req, res) => {
-    getList(req.params.id_user)
+exports.getList = async (req : Request, res : Response) => {
+    const authHeader = req.headers['authorization']
+    const token = authHeader && authHeader.split(' ')[1]
+    const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET)
+    getList(decoded.id)
     .then(rec => {
         res.status(200).json({'list': rec})
     })
@@ -24,8 +31,11 @@ exports.getList = async (req, res) => {
     })
 }
 
-exports.removeList = async (req, res) => {
-    removeList(req.params.id_user)
+exports.removeList = async (req : Request, res : Response) => {
+    const authHeader = req.headers['authorization']
+    const token = authHeader && authHeader.split(' ')[1]
+    const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET)
+    removeList(decoded.id)
     .then(rec => {
         res.status(200).json({'list': rec})
     })
@@ -35,8 +45,11 @@ exports.removeList = async (req, res) => {
     })
 }
 
-exports.removeMovie = async (req, res) => {
-    removeOneMovie(req.params.id_user, req.params.id_movie)
+exports.removeMovie = async (req : Request, res : Response) => {
+    const authHeader = req.headers['authorization']
+    const token = authHeader && authHeader.split(' ')[1]
+    const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET)
+    removeOneMovie(decoded.id, req.params.id_movie)
     .then(rec => {
         res.status(200).json({'list': rec})
     })
