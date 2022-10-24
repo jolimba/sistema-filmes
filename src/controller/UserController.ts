@@ -2,36 +2,21 @@
 const jwt = require('jsonwebtoken');
 require('dotenv').config()
 import { UserRepository } from "../repository/UserRepository"
-import { AppDataSource } from "../data-source"
+import { Users } from "../entity/Users"
 
 export const getUsers = async () => {
-    let err, users
     let repository = new UserRepository()
-    await repository.getAll()
-    .then(async (user) => {
-        users = user
-        await AppDataSource.destroy()
-    }).catch(error => {
-        err = error.message
-    })
-    return err ? err : users
+    let users = await repository.getAll()
+    return users
 }
 
-export const getOneUser = async (id: number) => {
-    let err, user
+export const getOneUser = async (id: number) : Promise<Users> => {
     let repository = new UserRepository()
-    await repository.getOne(id)
-    .then(async (getUser) => {
-        user = getUser
-        await AppDataSource.destroy()
-    }).catch(error => {
-        err = error.message
-    })
-    return err ? err : user
+    let user = await repository.getOne(id)
+    return user
 }
 
-export const addNewUser = async (body: any) => {
-    let err
+export const addNewUser = async (body: any) : Promise<string> => {
     let repository = new UserRepository()
     await repository.addNewUser(
         body.first_name,
@@ -41,16 +26,10 @@ export const addNewUser = async (body: any) => {
         body.login_user,
         body.pw_user
     )
-    .then(async () => {
-        await AppDataSource.destroy()
-    }).catch(error => {
-        err = error.message
-    })
-    return err ? err : `User ${body.login_user} created.`
+    return `User ${body.login_user} created.`
 }
 
-export const updateUser = async (id: number, body: any) => {
-    let err
+export const updateUser = async (id: number, body: any) : Promise<string> => {
     let repository = new UserRepository()
     await repository.updateUser(
         id,
@@ -61,45 +40,29 @@ export const updateUser = async (id: number, body: any) => {
         body.login_user,
         body.pw_user
     )
-    .then(async () => {
-        await AppDataSource.destroy()
-    }).catch(error => {
-        err = error.message
-    })
-    return err ? err : `User ${body.login_user} updated.`
+    return `User ${body.login_user} updated.`
 }
 
-export const removeUser = async (id: number) => {
-    let err
+export const removeUser = async (id: number) : Promise<string> => {
     let repository = new UserRepository()
     await repository.removeUser(id)
-    .then(async () => {
-        await AppDataSource.destroy()
-    }).catch(error => {
-        err = error.message
-    })
-    return err ? err : 'User removed.'
+    return'User removed.'
 }
 
-export const login = async (body: any) => {
-    let pwUser, loginUser, emailUser
-    pwUser = body.pw_user
-    loginUser = body.login_user
-    emailUser = body.email_user
-    console.log(pwUser, loginUser, emailUser)
-    let err
+export const login = async (body: any) : Promise<object> => {
+    let pw_user : string, login_user : string, email_user : string
+    pw_user = body.pw_user
+    login_user = body.login_user
+    email_user = body.email_user
     let repository = new UserRepository()
-    let token = createToken(emailUser, pwUser)
-    await repository.loginUser(pwUser, loginUser, emailUser)
-    .then(async () => {
-        await AppDataSource.destroy()
-    }).catch(error => {
-        err = error.message
-    })
-    return err ? err : token
+    let user = await repository.loginUser(pw_user, login_user, email_user)
+    let token = createToken(user.id, pw_user)
+    return {token}
 }
 
-const createToken = (email: string, pw: string): string => {
-    const user = { email: email, pw: pw }
-    return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET)
+const createToken = (id_user: number, pw: string) : string => {
+    const user = { "id": id_user.toString(), "pw": pw }
+    return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {
+        expiresIn: '1h'
+    })
 }

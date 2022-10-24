@@ -9,11 +9,129 @@ info:
 servers:
   - url: https://recomenda-filmes.herokuapp.com/
 tags:
+  - name: lists
+    description: Create a list 
+  - name: recommendations
+    description: Operations about recomendations
   - name: users
     description: Operations about user
   - name: login
     description: Access to system
+
 paths:
+  /lists/{user_id}:
+    get:
+        tags:
+          - lists
+        summary: Search for user's movie list
+        description: Consultation List From a User
+        parameters:
+          - in: path
+            name: user_id
+            required: true
+            schema:
+              type: integer
+              minimum: 1
+            description: The user ID
+        responses:
+          '200':
+            description: Successful operation
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Lists'
+    delete:
+        tags:
+          - lists
+        summary: Remove a movie from the user's list
+        description: Remove for a specific user using user_id
+        parameters:
+          - in: path
+            name: user_id
+            required: true
+            schema:
+              type: integer
+              minimum: 1
+            description: The user ID
+        responses:
+          '200':
+            description: Successful operation
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/UserRemove'
+          '404':
+            description: User not found
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/Error404'
+        security:
+          - user_auth:
+              - remove:users                    
+  /list: 
+    delete:
+      tags:
+        - lists
+      summary: Remove user's list
+      description: Removes all movies from the list and clears the list
+      responses: 
+        '200':
+          description: Sucessful operation
+          content:
+            applicarion/json:
+              schema:
+                $ref: '#/components/schemas/RemoveLists'
+    post: 
+      tags: 
+        - lists 
+      summary:  Add a new movie to the user list 
+      description: lists
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Lists'
+        required: true
+      responses:
+        '201':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListsResponse'
+  /cold_start:
+    get:
+        tags:
+          - recommendations
+        summary: Make HTTP request and order the movies
+        description: Group the films on the cards
+        responses:
+          '200':
+            description: Successful operation
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/ColdStartResponse'
+  /content_based:
+    post: 
+      tags: 
+        - recommendations 
+      summary: Access the movies in the database
+      description: Search movies in the back
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ContentBased'
+        required: true
+      responses:
+        '201':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ColdStartResponse'
   /users:
     post:
       tags:
@@ -204,6 +322,69 @@ paths:
             - read:users
 components:
   schemas:
+    RemoveLists:
+      type: object
+      properties:
+        message:
+          type: string
+          example: 'List cleared'
+    ListsResponse:
+      type: object
+      properties:
+        message: 
+          type: string
+          example: 'Movie added to yout list'
+    Lists:
+      type: object
+      properties:
+        id_user:
+          type: integer
+          example: 2
+        id_movie:
+          type: integer
+          example: 22
+    ColdStartResponse:
+      type: object
+      properties:
+          movies_info:
+            type: object
+            properties: 
+              movie_info:
+                type: object
+                properties: 
+                  id_program:
+                    type: integer
+                    example: 257
+                  serie_title:
+                    type: string
+                    example: Underground
+                  genre:
+                    type: string
+                    example: Comedy, Drama, War
+                  imdb_rating: 
+                    type: number
+                    example: 8.1
+                  overview: 
+                    type: string
+                    example: This is an overview
+                  director: 
+                    type: string
+                    example: Emir Kusturica
+                  star1: 
+                    type: string
+                    example: Predrag 'Miki' Manojlovic
+                  star2: 
+                    type: string
+                    example: Lazar Ristovski
+              movie_img: 
+                type: string
+                example: http://image.tmdb.org/t/p/w500/lnWkyG3LLgbbrIEeyl5mK5VRFe4.
+    ContentBased:
+      type: object
+      properties:
+        movies_name:  
+          type: string
+          example: 'nome de um filme'
     User:
       type: object
       properties:

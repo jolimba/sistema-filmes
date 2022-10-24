@@ -1,6 +1,6 @@
 --set transaction read write;
 CREATE TABLE users (
-    id_user serial PRIMARY KEY,
+    id serial PRIMARY KEY,
     first_name VARCHAR(30) NOT NULL,
     last_name VARCHAR(30),
     birth_date TIMESTAMP,
@@ -11,18 +11,30 @@ CREATE TABLE users (
 
 CREATE TABLE movies (
     id_program serial PRIMARY KEY,
-    name_program VARCHAR(150) NOT NULL,
-    category VARCHAR(5) NOT NULL,
-    rating float NOT NULL
+    Poster_Link TEXT,
+    Series_Title VARCHAR(200) NOT NULL,
+    Released_Year INTEGER NOT NULL,
+	Certificate TEXT,
+	Runtime TEXT,
+	Genre TEXT,
+	IMDB_Rating NUMERIC NOT NULL,
+	Overview TEXT NOT NULL,
+	Meta_score NUMERIC,
+	Director VARCHAR(150),
+	Star1 VARCHAR(80),
+	Star2 VARCHAR(80),
+	Star3 VARCHAR(80),
+	Star4 VARCHAR(80),
+	No_of_Votes INTEGER NOT NULL,
+	Gross NUMERIC NOT NULL
 );
 
 CREATE TABLE lists (
     id_list serial PRIMARY KEY,
-    id_user_fk INTEGER NOT NULL,
-    id_program_fk INTEGER NOT NULL,
-    type_list CHAR(1) NOT NULL,
-    FOREIGN KEY (id_user_fk) REFERENCES users (id_user),
-    FOREIGN KEY (id_program_fk) REFERENCES movies (id_program)
+    "usersId" INTEGER,
+    "moviesIdProgram" INTEGER,
+    FOREIGN KEY ("usersId") REFERENCES users (id),
+    FOREIGN KEY ("moviesIdProgram") REFERENCES movies (id_program)
 );
 
 -- alters user
