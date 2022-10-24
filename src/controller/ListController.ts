@@ -4,6 +4,7 @@ import { Users } from '../entity/Users';
 import { MoviesRepository } from '../repository/MoviesRepository';
 import { UserRepository } from '../repository/UserRepository';
 import { ListRepository } from '../repository/ListRepository';
+import { getExternalImage } from '../service/ExternalApi';
 
 const verifyUser = async (user: number) : Promise<Users> => {
     let usersRepo = new UserRepository()
@@ -20,6 +21,9 @@ const verifyMovie = async (movie: number) : Promise<Movies> => {
 export const saveList = async (id_user: number, id_movie: number) => {
     let user = await verifyUser(id_user)
     let movie = await verifyMovie(id_movie)
+    if(checkMovieInList(user, movie)) {
+        return `${movie.series_title} is already in the list`
+    }
     let listRepo = new ListRepository()
     return listRepo.addToList(user, movie)
 }
@@ -27,7 +31,8 @@ export const saveList = async (id_user: number, id_movie: number) => {
 export const getList = async (id_user: number) => {
     let user = await verifyUser(id_user)
     let listRepo = new ListRepository()
-    return listRepo.getUserList(user)
+    let list = await listRepo.getUserList(user)
+    return getMovieInfo(list)
 }
 
 export const removeList = async (id_user: number) => {
@@ -41,4 +46,21 @@ export const removeOneMovie = async (id_user: number, id_movie: number) => {
     let movie = await verifyMovie(id_movie)
     let listRepo = new ListRepository()
     return listRepo.removeOneMovie(user, movie)
+}
+
+const getMovieInfo = async (lists: any) => {
+    let movies_info = []
+    for (let list in lists) {
+        movies_info.push({
+            movie_info: lists[list],
+            movie_img: await getExternalImage(lists[list].movies.series_title)
+        })
+    }
+    console.log(movies_info)
+    return movies_info
+}
+
+const checkMovieInList = async (user, movie) : Promise<boolean> => {
+    let listRepo = new ListRepository()
+    return listRepo.checkMovieInList(user, movie)
 }

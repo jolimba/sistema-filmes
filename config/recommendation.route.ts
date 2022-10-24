@@ -10,6 +10,9 @@ exports.coldStart = async function(req : Request, res : Response) {
             'movie_info': rec
         })
     )
+    .catch(err => {
+        return {"error": err.message}
+    })
 }
 
 exports.contentBased = async function(req : Request, res : Response) {

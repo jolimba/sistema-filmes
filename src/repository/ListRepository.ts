@@ -18,6 +18,21 @@ export class ListRepository {
         return user_list
     }
 
+    checkMovieInList = async (user: Users, movie: Movies) : Promise<boolean> => {
+        await AppDataSource.initialize()
+        let user_list = await AppDataSource.manager
+            .createQueryBuilder(Lists, "lists")
+            .where("lists.users = :id AND lists.movies = :movie", { id: user.id, movie: movie.id_program})
+            .leftJoinAndSelect("lists.users", "users")
+            .leftJoinAndSelect("lists.movies", "movies")
+            .getMany()
+        await AppDataSource.destroy()
+        if(!user_list) {
+            return false
+        }
+        return true
+    }
+
     addToList = async (user: Users, movie: Movies) : Promise<string> => {
         await AppDataSource.initialize()
         let list = new Lists()
