@@ -21,11 +21,13 @@ const verifyMovie = async (movie: number) : Promise<Movies> => {
 export const saveList = async (id_user: number, id_movie: number) => {
     let user = await verifyUser(id_user)
     let movie = await verifyMovie(id_movie)
-    if(checkMovieInList(user, movie)) {
+    let check = await checkMovieInList(user, movie)
+    if(!check) {
         return `${movie.series_title} is already in the list`
     }
     let listRepo = new ListRepository()
-    return listRepo.addToList(user, movie)
+    let add = await listRepo.addToList(user, movie)
+    return add
 }
 
 export const getList = async (id_user: number) => {
@@ -62,5 +64,6 @@ const getMovieInfo = async (lists: any) => {
 
 const checkMovieInList = async (user, movie) : Promise<boolean> => {
     let listRepo = new ListRepository()
-    return listRepo.checkMovieInList(user, movie)
+    let estaNaLista = await listRepo.checkMovieInList(user, movie)
+    return estaNaLista
 }

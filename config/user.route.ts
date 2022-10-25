@@ -2,6 +2,7 @@
 import {Request, Response} from 'express'
 const user = require('../src/controller/UserController')
 import { Users } from "../src/entity/Users"
+import { AppDataSource } from "../src/data-source"
 
 exports.listUsers = async function(req : Request, res : Response) {
   user.getUsers().then((users : Users[]) => res.status(200).json({'users': users}))
@@ -25,4 +26,12 @@ exports.removeUser = async function(req : Request, res : Response) {
 
 exports.loginUser = async function(req : Request, res : Response) {
   user.login(req.body).then((result: string) => res.status(200).json(result))
+  .catch( async (error) => {
+    try {
+        await AppDataSource.destroy()
+    } catch (error) {
+        return res.status(401).json({'erro': error.message})
+    }
+    res.status(401).json({'erro': error.message})
+})
 }

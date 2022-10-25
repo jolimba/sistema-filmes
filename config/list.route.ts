@@ -7,12 +7,15 @@ import { saveList, getList, removeList, removeOneMovie } from '../src/controller
 import { AppDataSource } from "../src/data-source"
 
 exports.saveList = async (req : Request, res : Response) => {
-    saveList(req.body.id_user, req.body.id_movie)
+    const authHeader = req.headers['authorization']
+    const token = authHeader && authHeader.split(' ')[1]
+    const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET)
+    saveList(decoded.id, req.body.id_movie)
     .then(rec => {
         res.status(201).json({'message': rec})
     })
     .catch( async (error) => {
-        await AppDataSource.destroy()
+        console.log(error.message)
         res.status(401).json({'erro': error.message})
     })
 }
@@ -26,7 +29,11 @@ exports.getList = async (req : Request, res : Response) => {
         res.status(200).json({'list': rec})
     })
     .catch( async (error) => {
-        await AppDataSource.destroy()
+        try {
+            await AppDataSource.destroy()
+        } catch (error) {
+            return res.status(401).json({'erro': error.message})
+        }
         res.status(401).json({'erro': error.message})
     })
 }
@@ -40,7 +47,11 @@ exports.removeList = async (req : Request, res : Response) => {
         res.status(200).json({'list': rec})
     })
     .catch( async (error) => {
-        await AppDataSource.destroy()
+        try {
+            await AppDataSource.destroy()
+        } catch (error) {
+            return res.status(401).json({'erro': error.message})
+        }
         res.status(401).json({'erro': error.message})
     })
 }

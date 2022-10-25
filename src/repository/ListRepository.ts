@@ -27,10 +27,10 @@ export class ListRepository {
             .leftJoinAndSelect("lists.movies", "movies")
             .getMany()
         await AppDataSource.destroy()
-        if(!user_list) {
-            return false
+        if(user_list.length === 0) {
+            return true
         }
-        return true
+        return false
     }
 
     addToList = async (user: Users, movie: Movies) : Promise<string> => {
