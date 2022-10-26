@@ -60,7 +60,8 @@ exports.removeMovie = async (req : Request, res : Response) => {
     const authHeader = req.headers['authorization']
     const token = authHeader && authHeader.split(' ')[1]
     const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET)
-    removeOneMovie(decoded.id, req.params.id_movie)
+    console.log(decoded.id, typeof Number(req.params.id_movie))
+    removeOneMovie(decoded.id, Number(req.params.id_movie))
     .then(rec => {
         res.status(200).json({'list': rec})
     })

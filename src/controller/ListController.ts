@@ -26,8 +26,8 @@ export const saveList = async (id_user: number, id_movie: number) => {
         return `${movie.series_title} is already in the list`
     }
     let listRepo = new ListRepository()
-    let add = await listRepo.addToList(user, movie)
-    return add
+    let addUser = await listRepo.addToList(user, movie)
+    return addUser
 }
 
 export const getList = async (id_user: number) => {
@@ -46,6 +46,10 @@ export const removeList = async (id_user: number) => {
 export const removeOneMovie = async (id_user: number, id_movie: number) => {
     let user = await verifyUser(id_user)
     let movie = await verifyMovie(id_movie)
+    let check = await checkMovieInList(user, movie)
+    if(check) {
+        return `${movie.series_title} is no longer on your list`
+    }
     let listRepo = new ListRepository()
     return listRepo.removeOneMovie(user, movie)
 }

@@ -27,7 +27,7 @@ app.get('/cold_start', recommendation.coldStart)
 app.post('/list', list.saveList)
 app.get('/list', listMiddleware.authenticateToken, list.getList)
 app.delete('/list', list.removeList)
-app.delete('/list/:id_movie', list.removeMovie)
+app.delete('/list/:id_movie', listMiddleware.authenticateToken, list.removeMovie)
 // ping (rota teste)
 app.get('/ping', (res : Response) => {
     res.status(200).send('pong')
