@@ -13,7 +13,7 @@ CREATE TABLE movies (
     id_program serial PRIMARY KEY,
     Poster_Link TEXT,
     Series_Title VARCHAR(200) NOT NULL,
-    Released_Year INTEGER NOT NULL,
+    Released_Year VARCHAR NOT NULL,
 	Certificate TEXT,
 	Runtime TEXT,
 	Genre TEXT,
@@ -26,7 +26,7 @@ CREATE TABLE movies (
 	Star3 VARCHAR(80),
 	Star4 VARCHAR(80),
 	No_of_Votes INTEGER NOT NULL,
-	Gross NUMERIC NOT NULL
+	Gross VARCHAR
 );
 
 CREATE TABLE lists (
