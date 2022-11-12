@@ -53,7 +53,7 @@ export class ListRepository {
         .where("users = :users", {users: user.id})
         .execute()
         await AppDataSource.destroy()
-        return `${user.firstName}'s list removed.`
+        return `${user.first_name}'s list removed.`
     }
 
     removeOneMovie = async (user: Users, movie: Movies) : Promise<string> => {
@@ -65,6 +65,6 @@ export class ListRepository {
         .where("users = :users AND movies = :movies", {users: user.id, movies: movie.id_program})
         .execute()
         await AppDataSource.destroy()
-        return `Movie ${movie.series_title} from ${user.firstName}'s list was removed.`
+        return `Movie ${movie.series_title} from ${user.first_name}'s list was removed.`
     }
 }

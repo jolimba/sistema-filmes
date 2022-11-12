@@ -32,6 +32,6 @@ exports.loginUser = async function(req : Request, res : Response) {
     } catch (error) {
         return res.status(401).json({'erro': error.message})
     }
-    res.status(401).json({'erro': error.message})
+    // res.status(401).json({'erro': error.message});
 })
 }

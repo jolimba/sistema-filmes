@@ -17,10 +17,9 @@ exports.coldStart = async function(req : Request, res : Response) {
 
 exports.contentBased = async function(req : Request, res : Response) {
     getContentBased(req.body.movie_name)
-    .then(
-        rec => res.status(201)
-        .json({
-            'movies_info': rec
-        })
-    )
+    .then(rec => {
+        console.log(rec)
+        res.status(201).json({rec})
+    })
+    
 }

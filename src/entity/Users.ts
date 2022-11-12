@@ -7,20 +7,20 @@ export class Users {
     id: number
 
     @Column()
-    firstName: string
+    first_name: string
 
     @Column()
-    lastName: string
+    last_name: string
 
     @Column()
-    birthDate: string
+    birth_date: string
 
     @Column()
-    emailUser: string
+    email_user: string
 
     @Column()
-    loginUser: string
+    login_user: string
 
     @Column()
-    pwUser: string
+    pw_user: string
 }

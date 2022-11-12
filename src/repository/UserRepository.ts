@@ -31,12 +31,12 @@ export class UserRepository {
     ) : Promise<boolean> => {
         await AppDataSource.initialize()
         const user = new Users()
-        user.firstName = first_name
-        user.lastName = last_name
-        user.birthDate = birth_date
-        user.emailUser = email_user
-        user.loginUser = login_user
-        user.pwUser = pw_user
+        user.first_name = first_name
+        user.last_name = last_name
+        user.birth_date = birth_date
+        user.email_user = email_user
+        user.login_user = login_user
+        user.pw_user = pw_user
         await AppDataSource.manager.save(user)
         await AppDataSource.destroy()
         return true
@@ -57,12 +57,12 @@ export class UserRepository {
             .update()
             .where("id = :id", { id: id_user })
             .set({
-                firstName: first_name,
-                lastName: last_name,
-                birthDate: birth_date,
-                emailUser: email_user,
-                loginUser: login_user,
-                pwUser: pw_user
+                first_name: first_name,
+                last_name: last_name,
+                birth_date: birth_date,
+                email_user: email_user,
+                login_user: login_user,
+                pw_user: pw_user
             })
             .execute()
         await AppDataSource.destroy()
@@ -85,12 +85,12 @@ export class UserRepository {
         if(loginUser != null) {
             return AppDataSource.manager
             .createQueryBuilder(Users, "user")
-            .where("user.loginUser = :login and user.pwUser = :pw", { login: loginUser, pw: pwUser})
+            .where("user.login_user = :login and user.pw_user = :pw", { login: loginUser, pw: pwUser})
             .getOne()
         }
         let user = await AppDataSource.manager
             .createQueryBuilder(Users, "user")
-            .where("user.emailUser = :email and user.pwUser = :pw", { email: emailUser, pw: pwUser})
+            .where("user.email_user = :email and user.pw_user = :pw", { email: emailUser, pw: pwUser})
             .getOne()
         await AppDataSource.destroy()
         return user
