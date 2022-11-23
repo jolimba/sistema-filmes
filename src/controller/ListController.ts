@@ -62,7 +62,6 @@ const getMovieInfo = async (lists: any) => {
             movie_img: await getExternalImage(lists[list].movies.series_title)
         })
     }
-    console.log(movies_info)
     return movies_info
 }
 

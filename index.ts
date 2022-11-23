@@ -22,6 +22,7 @@ app.get('/users/:id', user.getOneUser)
 app.delete('/users/:id', user.removeUser)
 // recomendação - qualquer usuário
 app.post('/content_based', recommendation.contentBased)
+app.get('/collaborative', listMiddleware.authenticateToken, recommendation.collaborative)
 app.get('/cold_start', recommendation.coldStart)
 // lista - usuários logados
 app.post('/list', list.saveList)

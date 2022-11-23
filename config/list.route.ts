@@ -15,7 +15,6 @@ exports.saveList = async (req : Request, res : Response) => {
         res.status(201).json({'message': rec})
     })
     .catch( async (error) => {
-        console.log(error.message)
         res.status(401).json({'erro': error.message})
     })
 }
@@ -60,7 +59,6 @@ exports.removeMovie = async (req : Request, res : Response) => {
     const authHeader = req.headers['authorization']
     const token = authHeader && authHeader.split(' ')[1]
     const decoded = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET)
-    console.log(decoded.id, typeof Number(req.params.id_movie))
     removeOneMovie(decoded.id, Number(req.params.id_movie))
     .then(rec => {
         res.status(200).json({'list': rec})

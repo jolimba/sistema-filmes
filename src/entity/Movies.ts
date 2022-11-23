@@ -10,6 +10,9 @@ export class Movies {
     series_title: string
 
     @Column()
+    no_of_votes: number
+
+    @Column()
     genre: string
 
     @Column()

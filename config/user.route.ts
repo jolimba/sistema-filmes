@@ -30,7 +30,7 @@ exports.loginUser = async function(req : Request, res : Response) {
     try {
         await AppDataSource.destroy()
     } catch (error) {
-        return res.status(401).json({'erro': error.message})
+        return res.status(401).json({'erro': 'usuário ou senha inválidos'})
     }
     // res.status(401).json({'erro': error.message});
 })
