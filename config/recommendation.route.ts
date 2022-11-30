@@ -15,6 +15,12 @@ exports.coldStart = async function(req : Request, res : Response) {
     )
     .catch(err => {
         return {"error": err.message}
+    }).catch(async (err) => {
+        try {
+            await AppDataSource.destroy()
+        } catch (error) {
+            return res.status(401).json({'erro': error})
+        }
     })
 }
 
@@ -24,6 +30,12 @@ exports.contentBased = async function(req : Request, res : Response) {
         res.status(201).json({rec})
     }).catch(err => {
         return {"error": err.message}
+    }).catch(async (err) => {
+        try {
+            await AppDataSource.destroy()
+        } catch (error) {
+            return res.status(401).json({'erro': error})
+        }
     })
 }
 

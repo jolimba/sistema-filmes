@@ -22,13 +22,18 @@ export class MoviesRepository {
     }
 
     getOneById = async (movie_id: any) : Promise<Movies> => {
-        await AppDataSource.initialize()
-        let movie_info = await AppDataSource.manager
-            .createQueryBuilder(Movies, "movies")
-            .where(`movies.id_program = :id`, { id: movie_id })
-            .getOne()
-        await AppDataSource.destroy()
+        try {
+            await AppDataSource.initialize()
+            let movie_info = await AppDataSource.manager
+                .createQueryBuilder(Movies, "movies")
+                .where(`movies.id_program = :id`, { id: movie_id })
+                .getOne()
+            await AppDataSource.destroy()
         return movie_info
+        } catch (error) {
+            await AppDataSource.destroy()
+            console.log(error)
+        }
     }
 
     addNewMovie = async (movie) : Promise<boolean> => {
